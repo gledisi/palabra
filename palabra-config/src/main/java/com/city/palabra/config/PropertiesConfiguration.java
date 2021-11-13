@@ -29,9 +29,8 @@ public class PropertiesConfiguration {
 
     private Resource[] resources(String basePath) {
         final List<Resource> resourceList = new ArrayList<>();
-        resourceList.add(new FileSystemResource(basePath + "persistence.properties"));
-        resourceList.add(new FileSystemResource(basePath + "scheduler.properties"));
         resourceList.add(new FileSystemResource(basePath + "kafka-consumer.properties"));
+        resourceList.add(new FileSystemResource(basePath + "cassandra.properties"));
         return resourceList.toArray(new Resource[0]);
     }
 }
