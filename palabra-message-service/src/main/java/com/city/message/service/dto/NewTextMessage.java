@@ -4,7 +4,6 @@ import lombok.Data;
 
 @Data
 public class NewTextMessage {
-    private Long fromUser;
     private Long conversationId;
     private String text;
 }

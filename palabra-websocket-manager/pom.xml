@@ -12,8 +12,17 @@
     <artifactId>palabra-websocket-manager</artifactId>
 
     <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
+        <spring.session.data.redis.version>2.5.1</spring.session.data.redis.version>
     </properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.springframework.session</groupId>
+            <artifactId>spring-session-data-redis</artifactId>
+            <version>${spring.session.data.redis.version}</version>
+        </dependency>
+
+    </dependencies>
 
 </project>
