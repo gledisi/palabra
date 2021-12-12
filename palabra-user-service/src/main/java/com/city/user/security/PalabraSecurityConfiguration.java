@@ -79,6 +79,8 @@ public class PalabraSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	public CorsFilter corsConfigurationSource() {
 		final CorsConfiguration configuration = new CorsConfiguration();
 		configuration.addAllowedOrigin(properties.getAllowedOrigins());
+		configuration.addAllowedOrigin("http://localhost:4200");
+
 		configuration.setAllowedHeaders(
 				Arrays.asList(HttpHeaders.AUTHORIZATION, HttpHeaders.CONTENT_TYPE, HttpHeaders.CACHE_CONTROL));
 		configuration.setAllowedMethods(
