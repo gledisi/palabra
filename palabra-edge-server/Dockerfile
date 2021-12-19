@@ -1,8 +1,9 @@
 #stage 1
+#Start with a base image containing Java runtime
 FROM openjdk:11-slim as build
 
 # Add Maintainer Info
-LABEL maintainer="Mario Gegaj <mario.gegaj@city.ac.uk>"
+LABEL maintainer="Mario Gegaj <m.gegaj70@gmail.com>"
 
 # The application's jar file
 ARG JAR_FILE
@@ -27,4 +28,4 @@ COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app
 
 #execute the application
-ENTRYPOINT ["java","-cp","app:app/lib/*","com.palabra.configserver.PalabraConfigurationServer"]
+ENTRYPOINT ["java","-cp","app:app/lib/*","com.impatech.edgeserver.PalabraEdgeServer"]

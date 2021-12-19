@@ -27,6 +27,7 @@
         <module>palabra-websocket-manager</module>
         <module>palabra-discovery-server</module>
         <module>palabra-configuration-server</module>
+        <module>palabra-edge-server</module>
     </modules>
     <properties>
         <java.version>1.8</java.version>
