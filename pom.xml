@@ -26,6 +26,7 @@
         <module>palabra-media-service</module>
         <module>palabra-websocket-manager</module>
         <module>palabra-config-server</module>
+        <module>palabra-discovery-server</module>
     </modules>
     <properties>
         <java.version>1.8</java.version>

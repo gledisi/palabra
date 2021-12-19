@@ -1,4 +1,5 @@
 #stage 1
+#Start with a base image containing Java runtime
 FROM openjdk:11-slim as build
 
 # Add Maintainer Info
@@ -27,4 +28,4 @@ COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app
 
 #execute the application
-ENTRYPOINT ["java","-cp","app:app/lib/*","com.palabra.configserver.PalabraConfigurationServerApplication"]
+ENTRYPOINT ["java","-cp","app:app/lib/*","com.palabra.discoveryserver.PalabraDiscoveryServer"]
