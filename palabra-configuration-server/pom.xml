@@ -10,6 +10,7 @@
         <version>2.2.5.RELEASE</version>
         <relativePath/>
     </parent>
+
     <groupId>com.palabra</groupId>
     <artifactId>configserver</artifactId>
     <version>0.0.1-SNAPSHOT</version>
