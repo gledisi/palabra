@@ -80,6 +80,7 @@ public class JwtService {
 						.id(extractTokenIdFromClaims(claims))
 						.mobile(extractMobileFromClaims(claims))
 						.authorities(extractAuthoritiesFromClaims(claims))
+						.valid(true)
 						.build();
 
 			} catch (UnsupportedJwtException | MalformedJwtException | IllegalArgumentException | SignatureException e) {

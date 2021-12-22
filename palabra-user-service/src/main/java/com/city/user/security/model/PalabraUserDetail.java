@@ -11,6 +11,7 @@ import java.util.Collection;
 public class PalabraUserDetail implements UserDetails, CredentialsContainer {
 
     private static final long serialVersionUID = 1L;
+    private final Long userId;
     private final String mobile;
     private String activationCode;
     private final Collection<PalabraAuthority> authority;

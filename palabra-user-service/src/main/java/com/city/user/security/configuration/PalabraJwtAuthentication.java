@@ -63,6 +63,11 @@ public class PalabraJwtAuthentication extends AbstractAuthenticationToken {
 	}
 
 	@Override
+	public Object getDetails() {
+		return tokenDetails;
+	}
+
+	@Override
 	public void eraseCredentials() {
 		super.eraseCredentials();
 		this.authenticationToken = null;
