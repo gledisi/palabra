@@ -1,57 +1,60 @@
 package com.city.message.controller;
 
-import com.city.message.service.MessageService;
-import com.city.message.service.dto.Conversation;
-import com.city.message.service.dto.ConversationMessages;
-import com.city.message.service.dto.NewConversationMessage;
+import com.city.message.entity.MessagesByConversationEntity;
+import com.city.message.service.ConversationService;
 import com.city.message.service.dto.NewTextMessage;
+import com.city.message.service.dto.ReplyMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.util.List;
 
 @RestController
 @RequestMapping("messages")
 public class MessageController {
 
-    private final MessageService service;
+    private final ConversationService service;
 
     @Autowired
-    public MessageController(MessageService service) {
+    public MessageController(ConversationService service) {
         this.service = service;
     }
 
-
-
     @GetMapping(value = {"/{conversationId}"})
-    public ResponseEntity<ConversationMessages> getConversation(@PathVariable Long conversationId){
-        return ResponseEntity.ok(service.getConversation(conversationId));
+    public ResponseEntity<List<MessagesByConversationEntity>> getConversationMessages(@PathVariable String conversationId) {
+        return ResponseEntity.ok(service.getMessagesByConversation(conversationId));
     }
 
-
-    @PostMapping
-    public ResponseEntity<String> newMessage(@RequestBody NewTextMessage newTextMessage){
-        service.insertTextMessage(newTextMessage);
-        return ResponseEntity.ok("OK");
+    @GetMapping
+    public ResponseEntity<List<MessagesByConversationEntity>> getConversationMessagesByUser(@PathParam("userId") String userId) {
+        return ResponseEntity.ok(service.getMessagesByUser(userId));
     }
 
-    @PostMapping(value = "/replay/{messageId}")
-    public ResponseEntity<String> replyMessage(@PathVariable Long messageId,@RequestBody NewTextMessage newTextMessage){
-        service.replyTextMessage(messageId, newTextMessage);
-        return ResponseEntity.ok("OK");
+    @MessageMapping("/new")
+    @SendTo("/topic/messages")
+    public ResponseEntity<MessagesByConversationEntity> newMessage(NewTextMessage newTextMessage) {
+        return ResponseEntity.ok(service.newMessage(newTextMessage));
     }
 
-    @PostMapping(value = "/forward/{messageId}")
-    public ResponseEntity<String> forwardMessage(@PathVariable Long messageId,@RequestBody NewTextMessage newTextMessage){
-        service.forwardTextMessage(messageId, newTextMessage);
-        return ResponseEntity.ok("OK");
+    @MessageMapping("/reply")
+    @SendTo("/topic/messages")
+    public ResponseEntity<MessagesByConversationEntity> replyMessage(ReplyMessage newTextMessage) {
+        return ResponseEntity.ok(service.replyTextMessage(newTextMessage));
     }
+
+    //TODO:
+//    @PostMapping(value = "/forward")
+//    public ResponseEntity<MessagesByConversationEntity> forwardMessage(ForwardMessage newTextMessage){
+//        return ResponseEntity.ok(service.forwardTextMessage(newTextMessage));
+//    }
 
     @DeleteMapping(value = "/{messageId}")
-    public ResponseEntity<String> deleteMessage(@PathVariable Long messageId){
-        service.deleteMessage(messageId);
-        return ResponseEntity.ok("OK");
+    public ResponseEntity<Boolean> deleteMessage(@PathVariable String messageId) {
+        return ResponseEntity.ok(service.deleteMessage(messageId));
     }
 
 }
