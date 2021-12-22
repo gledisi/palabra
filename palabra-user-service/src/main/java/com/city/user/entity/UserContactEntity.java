@@ -10,7 +10,7 @@ import java.util.Objects;
 import static com.city.user.util.Constants.DB_SCHEMA;
 
 @Entity
-@Table(name = "user_contact", schema = DB_SCHEMA)
+@Table(name = "contact", schema = DB_SCHEMA)
 public class UserContactEntity implements Serializable {
     private static final long serialVersionUID = 1933922682791931931L;
 
@@ -23,15 +23,26 @@ public class UserContactEntity implements Serializable {
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToOne
     @JoinColumn(name = "contact_id")
-    private List<UserEntity> contacts;
+    private UserEntity contact;
+
+    @Column(name = "name")
+    private String name;
 
     @Column(name = "created_on", nullable = false)
     private LocalDateTime createdOn;
 
     @Version
     private Short version;
+
+    public UserEntity getContact() {
+        return contact;
+    }
+
+    public void setContact(UserEntity contact) {
+        this.contact = contact;
+    }
 
     public Long getId() {
         return id;
@@ -49,14 +60,6 @@ public class UserContactEntity implements Serializable {
         this.user = user;
     }
 
-    public List<UserEntity> getContacts() {
-        return contacts;
-    }
-
-    public void setContacts(List<UserEntity> contacts) {
-        this.contacts = contacts;
-    }
-
     public LocalDateTime getCreatedOn() {
         return createdOn;
     }
@@ -71,6 +74,14 @@ public class UserContactEntity implements Serializable {
 
     public void setVersion(Short version) {
         this.version = version;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override

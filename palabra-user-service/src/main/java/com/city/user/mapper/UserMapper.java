@@ -1,6 +1,9 @@
 package com.city.user.mapper;
 
+import com.city.user.dto.ContactResponse;
+import com.city.user.dto.NewContactRequest;
 import com.city.user.dto.UserResponse;
+import com.city.user.entity.UserContactEntity;
 import com.city.user.entity.UserEntity;
 
 import java.time.LocalDateTime;
@@ -34,5 +37,25 @@ public class UserMapper {
         entity.setName("");
         entity.setCode(code);
         return entity;
+    }
+
+    public static UserContactEntity toContactEntity(NewContactRequest dto){
+        UserContactEntity entity = new UserContactEntity();
+        entity.setCreatedOn(LocalDateTime.now());
+        entity.setName(dto.getName());
+        return entity;
+    }
+
+    public static ContactResponse toContactResponse(UserContactEntity entity){
+        ContactResponse response = new ContactResponse();
+        response.setContactId(entity.getId());
+        response.setCreatedOn(entity.getCreatedOn());
+        response.setName(entity.getName());
+        response.setUser(toDto(entity.getContact()));
+        return response;
+    }
+
+    public static List<ContactResponse> contactResponse(List<UserContactEntity> entities) {
+        return entities.stream().map(UserMapper::toContactResponse).collect(Collectors.toList());
     }
 }

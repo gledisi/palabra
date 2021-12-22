@@ -13,4 +13,7 @@ public interface UserRepository extends CrudRepository<UserEntity,Long> {
     @Modifying(clearAutomatically = true)
     @Query("UPDATE UserEntity e SET e.code=:code where e.mobile=:mobile")
     int updateCode(@Param("code")String code,@Param("mobile")String mobile);
+
+    @Query("select e FROM UserEntity e where e.id=:uuid")
+    UserEntity findByUUID(String uuid);
 }
