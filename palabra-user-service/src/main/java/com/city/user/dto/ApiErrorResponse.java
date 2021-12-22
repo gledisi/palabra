@@ -1,5 +1,6 @@
 package com.city.user.dto;
 
+import com.city.user.exceptions.PalabraErrorStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -37,6 +38,17 @@ public class ApiErrorResponse {
 	public ApiErrorResponse(List<String> messages, HttpStatus status) {
 		this.messages = messages;
 		addStatusFields(status);
+	}
+
+	public ApiErrorResponse(PalabraErrorStatus errorStatus, List<String> messages) {
+		this.error=errorStatus.getError();
+		this.status=errorStatus.getStatus();
+		this.messages = messages;
+	}
+
+	public ApiErrorResponse(HttpStatus httpStatus, List<String> messages) {
+		this.status =httpStatus;
+		this.messages = messages;
 	}
 
 	private void addStatusFields(HttpStatus status) {
