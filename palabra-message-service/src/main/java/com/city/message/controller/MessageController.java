@@ -34,6 +34,11 @@ public class MessageController {
         return ResponseEntity.ok(service.getMessagesByUser(userId));
     }
 
+    @PostMapping
+    public ResponseEntity<MessagesByConversationEntity> newMessage1(@RequestBody NewTextMessage newTextMessage) {
+        return ResponseEntity.ok(service.newMessage(newTextMessage));
+    }
+
     @MessageMapping("/new")
     @SendTo("/topic/messages")
     public ResponseEntity<MessagesByConversationEntity> newMessage(NewTextMessage newTextMessage) {

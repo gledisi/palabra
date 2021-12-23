@@ -5,11 +5,14 @@ import com.city.message.repository.*;
 import com.city.message.service.dto.NewConversationMessage;
 import com.city.message.service.dto.NewTextMessage;
 import com.city.message.service.dto.ReplyMessage;
+import com.city.message.service.dto.UserDetails;
 import com.city.message.service.mapper.ConversationMapper;
 import com.city.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.cassandra.core.CassandraBatchOperations;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -32,14 +35,6 @@ public class ConversationService {
     }
 
     //OPERATION RELATED TO CONVERSATION
-
-    public ConversationsByUserEntity insertNewTextMessage(NewConversationMessage textMessage){
-        ConversationsByUserEntity entity = ConversationMapper.toEntity(textMessage);
-        entity.setUserId(USER_ID);
-        entity.setContact(userService.getUserDetails(textMessage.getToUser()));
-        return conversationRepository.insert(entity);
-    }
-
     public Boolean deleteConversation(String conversationId) {
         return conversationRepository.deleteById(UUID.fromString(conversationId));
     }
@@ -49,20 +44,25 @@ public class ConversationService {
         return conversationRepository.findByUserId(USER_ID);
     }
 
-    public ConversationsByUserEntity getConversation(String conversationId) {
-       return conversationRepository.findByUserIdAndConversationId(USER_ID,UUID.fromString(conversationId));
+    public ConversationsByUserEntity getConversation(UUID userId,UUID conversationId) {
+       return conversationRepository.findByUserIdAndConversationId(userId,conversationId);
     }
 
     //OPERATION RELATED TO MESSAGES
 
-    public List<MessagesByConversationEntity> getMessagesByConversation(String conversationId) {
-        return messageRepository.getMessages(UUID.fromString(conversationId));
+    public ConversationsByUserEntity insertNewTextMessage(NewConversationMessage textMessage){
+        ConversationsByUserEntity entity = ConversationMapper.toEntity(textMessage);
+        entity.setUserId(USER_ID);
+        entity.setContact(userService.getUserDetails(textMessage.getToUser()));
+        return conversationRepository.insert(entity);
     }
 
     public MessagesByConversationEntity newMessage(NewTextMessage newTextMessage) {
-        MessagesByConversationEntity entity = ConversationMapper.toEntity(newTextMessage);
-        entity.setFromUser(USER_ID);
-        return messageRepository.insertMessage(entity);
+        MessagesByConversationEntity message = ConversationMapper.toEntity(newTextMessage);
+        conversationRepository.updateUnreadCounter(newTextMessage.getConversationId(),newTextMessage.getToUser());
+        conversationRepository.updateConversationByUser(newTextMessage,newTextMessage.getFromUser());
+        conversationRepository.updateConversationByUser(newTextMessage,newTextMessage.getToUser());
+        return messageRepository.insertMessage(message);
     }
 
     public MessagesByConversationEntity replyTextMessage(ReplyMessage newTextMessage) {
@@ -80,4 +80,9 @@ public class ConversationService {
         if(userConversation==null || userConversation.getConversationId()==null)return Collections.emptyList();
         return messageRepository.getMessages(userConversation.getConversationId());
     }
+    public List<MessagesByConversationEntity> getMessagesByConversation(String conversationId) {
+        return messageRepository.getMessages(UUID.fromString(conversationId));
+    }
+
+
 }

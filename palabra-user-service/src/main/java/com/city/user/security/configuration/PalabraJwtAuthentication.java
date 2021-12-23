@@ -1,10 +1,15 @@
 package com.city.user.security.configuration;
 
+import com.city.user.security.model.PalabraAuthority;
 import com.city.user.security.model.PalabraTokenDetails;
 import com.city.user.security.model.PalabraUserDetail;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class PalabraJwtAuthentication extends AbstractAuthenticationToken {
 	
@@ -33,9 +38,10 @@ public class PalabraJwtAuthentication extends AbstractAuthenticationToken {
 		super.setAuthenticated(true);
 	}
 
-	public PalabraJwtAuthentication(UserDetails userDetail) {
+	public PalabraJwtAuthentication(UserDetails userDetail,PalabraTokenDetails tokenDetails) {
 		super(userDetail.getAuthorities());
 		setDetails(userDetail);
+		this.tokenDetails = tokenDetails;
 		super.setAuthenticated(true);
 	}
 
@@ -60,11 +66,6 @@ public class PalabraJwtAuthentication extends AbstractAuthenticationToken {
 	@Override
 	public Object getPrincipal() {
 		return this.tokenDetails;
-	}
-
-	@Override
-	public Object getDetails() {
-		return tokenDetails;
 	}
 
 	@Override

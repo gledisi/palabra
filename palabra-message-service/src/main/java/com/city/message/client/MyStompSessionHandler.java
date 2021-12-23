@@ -46,7 +46,7 @@ public class MyStompSessionHandler extends StompSessionHandlerAdapter {
      */
     private NewTextMessage getSampleMessage() {
         NewTextMessage msg = new NewTextMessage();
-        msg.setConversationId(1L);
+        msg.setConversationId("59c3ab91-5ce3-11ec-9468-0f77570dcbdb");
         msg.setText("Howdy!!");
         return msg;
     }

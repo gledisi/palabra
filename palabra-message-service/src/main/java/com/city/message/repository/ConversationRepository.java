@@ -1,12 +1,17 @@
 package com.city.message.repository;
 
 import com.city.message.entity.ConversationsByUserEntity;
+import com.city.message.entity.UnreadMessagesCounterEntity;
 import com.city.message.entity.UserConversationEntity;
+import com.city.message.service.dto.NewTextMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.cassandra.core.CassandraOperations;
 import org.springframework.data.cassandra.core.query.Query;
+import org.springframework.data.cassandra.core.query.Update;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,7 +31,7 @@ public class ConversationRepository {
     }
 
     public List<ConversationsByUserEntity> findByUserId(UUID uId) {
-        Query query = query(where("user_id").is(uId));
+        Query query = query(where("user_id").is(uId)).sort(Sort.by("last_msg_time").descending());
         return template.select(query, ConversationsByUserEntity.class);
     }
 
@@ -35,6 +40,27 @@ public class ConversationRepository {
         return template.selectOne(query, UserConversationEntity.class);
     }
 
+    public ConversationsByUserEntity updateConversationByUser(NewTextMessage message,UUID userId) {
+        UUID convUuid = message.getConversationId();
+        UnreadMessagesCounterEntity unreadMsgCount = getUnreadCounter(convUuid,userId);
+        ConversationsByUserEntity conv = findByUserIdAndConversationId(userId,convUuid);
+        conv.setLastMsg(message.getText());
+        conv.setLastMsgTime(LocalDateTime.now());
+        conv.setUnreadMsgCount(unreadMsgCount.getCount());
+        return template.insert(conv);
+    }
+
+
+    public Boolean updateUnreadCounter(UUID conversationId,UUID userId) {
+        Query query = query(where("conversation_id").is(conversationId)).and(where("user_id").is(userId));
+        Update update = Update.empty().increment("count");
+        return template.update(query,update, UnreadMessagesCounterEntity.class);
+    }
+
+    public UnreadMessagesCounterEntity getUnreadCounter(UUID conversationId,UUID userId) {
+        Query query = query(where("conversation_id").is(conversationId)).and(where("user_id").is(userId));
+        return template.selectOne(query, UnreadMessagesCounterEntity.class);
+    }
 
     public boolean deleteById(UUID fromString) {
         return false;

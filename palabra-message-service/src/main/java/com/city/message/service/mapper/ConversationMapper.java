@@ -21,10 +21,11 @@ public class ConversationMapper {
     }
     public static MessagesByConversationEntity toEntity(NewTextMessage newTextMessage){
         MessagesByConversationEntity entity = new MessagesByConversationEntity();
-        entity.setMessageId(UUID.randomUUID());
+        entity.setFromUser(newTextMessage.getFromUser());
+        entity.setMessageId(newTextMessage.getConversationId());
         entity.setText(newTextMessage.getText());
         entity.setDeliveredTime(LocalDateTime.now());
-        entity.setConversationId(UUID.fromString(newTextMessage.getConversationId()));
+        entity.setConversationId(newTextMessage.getConversationId());
         return entity;
     }
 
@@ -37,6 +38,13 @@ public class ConversationMapper {
         return entity;
     }
 
+    public static ConversationsByUserEntity toConversationEntity(MessagesByConversationEntity newTextMessage) {
+        ConversationsByUserEntity entity = new ConversationsByUserEntity();
+        entity.setLastMsgTime(newTextMessage.getDeliveredTime());
+        entity.setLastMsg(newTextMessage.getText());
+        entity.setConversationId(newTextMessage.getConversationId());
+        return entity;
+    }
 }
 
 

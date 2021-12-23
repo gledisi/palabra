@@ -16,7 +16,6 @@ public class MessagesByConversationEntity implements Serializable {
     private static final long serialVersionUID = -4628383980504875248L;
 
     @PrimaryKey("conversation_id")
-    @CassandraType(type = CassandraType.Name.TIMEUUID)
     private UUID conversationId;
 
     @Column("message_id")

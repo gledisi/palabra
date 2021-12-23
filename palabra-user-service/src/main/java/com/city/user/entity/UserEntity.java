@@ -19,6 +19,9 @@ public class UserEntity implements Serializable {
     @Column(unique = true, nullable = false)
     private Long id;
 
+    @Column(nullable = false)
+    private String uuid;
+
     @Column(nullable = false, length = 50)
     private String name;
 
@@ -39,6 +42,14 @@ public class UserEntity implements Serializable {
 
     @Version
     private Short version;
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
 
     public String getCode() {
         return code;

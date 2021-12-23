@@ -32,7 +32,7 @@ public class UserServiceAdapter {
     private UserDetails toDto(UserResponse response) {
         UserDetails dto = new UserDetails();
         dto.setContactPhoto(response.getPhoto());
-        dto.setUserId(response.getId().toString());
+        dto.setUserUUID(response.getUuid());
         dto.setContactName(response.getName());
         return dto;
     }

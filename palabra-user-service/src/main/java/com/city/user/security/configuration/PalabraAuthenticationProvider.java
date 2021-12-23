@@ -38,7 +38,7 @@ public class PalabraAuthenticationProvider implements AuthenticationProvider {
 		PalabraTokenDetails tokenDetails = jwtService.parseToken(authenticationToken);
 		if(shouldVerifyCode(tokenDetails.getAuthorities())){
 			UserDetails userDetail =checkCode(tokenDetails.getMobile(),code);
-			return new PalabraJwtAuthentication(userDetail);
+			return new PalabraJwtAuthentication(userDetail,tokenDetails);
 		}
 		return new PalabraJwtAuthentication(tokenDetails);
 	}

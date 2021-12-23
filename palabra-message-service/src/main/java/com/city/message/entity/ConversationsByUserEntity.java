@@ -30,7 +30,6 @@ public class ConversationsByUserEntity implements Serializable {
     private Byte[] contactPhoto;
 
     @Column("conversation_id")
-    @CassandraType(type = CassandraType.Name.TIMEUUID)
     private UUID conversationId;
 
     @Column("last_msg_time")
@@ -43,9 +42,12 @@ public class ConversationsByUserEntity implements Serializable {
     private Integer unreadMsgCount;
 
     public void setContact(UserDetails userDetails){
-        this.setContactId(UUID.fromString(userDetails.getUserId()));
+        this.setContactId(UUID.fromString(userDetails.getUserUUID()));
         this.setContactName(userDetails.getContactName());
         this.setContactPhoto(userDetails.getContactPhoto());
     }
 
+    public void incrementUnreadMessagesCount() {
+        this.unreadMsgCount+=unreadMsgCount;
+    }
 }

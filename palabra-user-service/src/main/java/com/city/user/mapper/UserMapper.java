@@ -20,6 +20,7 @@ public class UserMapper {
     public static UserResponse toDto(UserEntity entity){
         UserResponse response = new UserResponse();
         response.setId(entity.getId());
+        response.setUuid(entity.getUuid());
         response.setName(entity.getName());
         response.setMobile(entity.getMobile());
         response.setPhoto(entity.getPhoto());

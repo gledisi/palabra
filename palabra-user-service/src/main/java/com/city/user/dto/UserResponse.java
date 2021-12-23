@@ -7,6 +7,7 @@ import lombok.ToString;
 @Getter @Setter @ToString
 public class UserResponse {
     private Long id;
+    private String uuid;
     private String name;
     private String mobile;
     private Byte[] photo;

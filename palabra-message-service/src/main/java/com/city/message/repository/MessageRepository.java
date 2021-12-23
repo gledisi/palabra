@@ -1,21 +1,20 @@
 package com.city.message.repository;
 
+import com.city.message.entity.ConversationsByUserEntity;
 import com.city.message.entity.MessagesByConversationEntity;
-import com.city.message.service.dto.ConversationMessages;
-import com.city.message.service.dto.ForwardMessage;
-import com.city.message.service.dto.NewTextMessage;
-import com.city.message.service.dto.ReplyMessage;
+import com.city.message.entity.UnreadMessagesCounterEntity;
+import com.datastax.driver.core.querybuilder.Batch;
+import com.datastax.driver.core.querybuilder.Insert;
+import com.datastax.driver.core.querybuilder.QueryBuilder;
+import com.datastax.driver.core.querybuilder.Select;
+import com.datastax.oss.driver.api.core.cql.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.cassandra.core.CassandraBatchOperations;
 import org.springframework.data.cassandra.core.CassandraOperations;
 import org.springframework.data.cassandra.core.query.Query;
-import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.data.cassandra.core.query.Update;
+import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 import java.util.UUID;
@@ -39,7 +38,6 @@ public class MessageRepository {
     public MessagesByConversationEntity insertMessage(MessagesByConversationEntity message){
         return template.insert(message);
     }
-
 
     public boolean deleteMessage(UUID messageId){
         return false;
