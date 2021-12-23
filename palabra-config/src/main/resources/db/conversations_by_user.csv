@@ -1,0 +1,5 @@
+user id,contact name,contact id,contact photo,conversation id,last msg time,last msg,unread msg count  
+44b5fc4b-cb01-49b6-882a-55880c1e82a8,"mario",9e30f7a1-60b2-4c54-95fa-c710c5cfb2fe,,cffe7e18-5ce1-11ec-bf63-0242ac130002,2021-12-14 13:31:30.167000+0000,"hey",0
+44b5fc4b-cb01-49b6-882a-55880c1e82a8,"mario_uk",10d076f7-fbdd-4e88-8ee6-a6fc808d136e,,6cf01380-5ce2-11ec-9468-0f77570dcbdb,2021-12-14 13:33:30.167000+0000,"hi",0
+44b5fc4b-cb01-49b6-882a-55880c1e82a8,"mario_1",6c4ce2cb-fd02-4eba-a189-a3611d989f82,,59c3ab91-5ce3-11ec-9468-0f77570dcbdb,2021-12-14 13:40:07.497000+0000,"hey1",0
+6c4ce2cb-fd02-4eba-a189-a3611d989f82,"gled",44b5fc4b-cb01-49b6-882a-55880c1e82a8,,59c3ab91-5ce3-11ec-9468-0f77570dcbdb,2021-12-14 13:42:07.497000+0000,"hey1",0
