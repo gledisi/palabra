@@ -31,7 +31,7 @@ public class ConversationRepository {
     }
 
     public List<ConversationsByUserEntity> findByUserId(UUID uId) {
-        Query query = query(where("user_id").is(uId)).sort(Sort.by("last_msg_time").descending());
+        Query query = query(where("user_id").is(uId));
         return template.select(query, ConversationsByUserEntity.class);
     }
 

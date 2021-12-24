@@ -42,7 +42,7 @@ public class ConversationsByUserEntity implements Serializable {
     private Integer unreadMsgCount;
 
     public void setContact(UserDetails userDetails){
-        this.setContactId(UUID.fromString(userDetails.getUserUUID()));
+        this.setContactId(userDetails.getUserUUID());
         this.setContactName(userDetails.getContactName());
         this.setContactPhoto(userDetails.getContactPhoto());
     }

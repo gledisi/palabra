@@ -41,7 +41,7 @@ public class ConversationService {
 
 
     public List<ConversationsByUserEntity> getConversationsByUser() {
-        return conversationRepository.findByUserId(USER_ID);
+        return conversationRepository.findByUserId(userService.getAuthenticatedUser().getUserUUID());
     }
 
     public ConversationsByUserEntity getConversation(UUID userId,UUID conversationId) {
@@ -52,7 +52,7 @@ public class ConversationService {
 
     public ConversationsByUserEntity insertNewTextMessage(NewConversationMessage textMessage){
         ConversationsByUserEntity entity = ConversationMapper.toEntity(textMessage);
-        entity.setUserId(USER_ID);
+        entity.setUserId(userService.getAuthenticatedUser().getUserUUID());
         entity.setContact(userService.getUserDetails(textMessage.getToUser()));
         return conversationRepository.insert(entity);
     }
@@ -67,7 +67,7 @@ public class ConversationService {
 
     public MessagesByConversationEntity replyTextMessage(ReplyMessage newTextMessage) {
         MessagesByConversationEntity entity = ConversationMapper.toEntity(newTextMessage);
-        entity.setFromUser(USER_ID);
+        entity.setFromUser(userService.getAuthenticatedUser().getUserUUID());
         return messageRepository.insertMessage(entity);
     }
 
@@ -76,10 +76,11 @@ public class ConversationService {
     }
 
     public List<MessagesByConversationEntity> getMessagesByUser(String userId) {
-        UserConversationEntity userConversation= conversationRepository.findUserConversation(USER_ID,UUID.fromString(userId));
+        UserConversationEntity userConversation= conversationRepository.findUserConversation(userService.getAuthenticatedUser().getUserUUID(),UUID.fromString(userId));
         if(userConversation==null || userConversation.getConversationId()==null)return Collections.emptyList();
         return messageRepository.getMessages(userConversation.getConversationId());
     }
+
     public List<MessagesByConversationEntity> getMessagesByConversation(String conversationId) {
         return messageRepository.getMessages(UUID.fromString(conversationId));
     }

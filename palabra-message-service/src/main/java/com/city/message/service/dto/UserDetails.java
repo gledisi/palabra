@@ -9,4 +9,8 @@ public class UserDetails {
     private String userUUID;
     private String contactName;
     private Byte[] contactPhoto;
+
+    public UUID getUserUUID() {
+        return UUID.fromString(userUUID);
+    }
 }
