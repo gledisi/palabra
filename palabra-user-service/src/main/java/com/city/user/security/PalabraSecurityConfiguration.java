@@ -6,7 +6,9 @@ import com.city.user.security.configuration.JwtAuthenticationFilter;
 import com.city.user.security.configuration.PalabraAuthenticationProvider;
 import com.city.user.util.Endpoints;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.Ordered;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -76,26 +78,28 @@ public class PalabraSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	}
 
 	@Bean
-	public CorsFilter corsConfigurationSource() {
-		final CorsConfiguration configuration = new CorsConfiguration();
-		configuration.addAllowedOrigin(properties.getAllowedOrigins());
-		configuration.setAllowedHeaders(
-				Arrays.asList(HttpHeaders.AUTHORIZATION, HttpHeaders.CONTENT_TYPE, HttpHeaders.CACHE_CONTROL));
-		configuration.setAllowedMethods(
-				Arrays.stream(HttpMethod.values()).map(HttpMethod::name).collect(Collectors.toList()));
-		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration(Endpoints.ALL, configuration);
-		return new CorsFilter(source);
+	public FilterRegistrationBean<CorsFilter> corsFilter() {
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		CorsConfiguration config = new CorsConfiguration();
+		config.setAllowCredentials(true);
+		config.addAllowedOriginPattern(properties.getAllowedOrigins());
+		config.setAllowedMethods(Arrays.asList("POST", "OPTIONS", "GET", "DELETE", "PUT"));
+		config.setAllowedHeaders(Arrays.asList("X-Requested-With", "Origin", "Content-Type", "Accept", "Authorization"));
+		source.registerCorsConfiguration(Endpoints.ALL, config);
+		FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<>(new CorsFilter(source));
+		bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
+		return bean;
 	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		// @formatter:off
 		http.csrf().disable();
-
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-		http.authorizeRequests().antMatchers(Endpoints.SEND_CODE).permitAll().antMatchers(Endpoints.LOGIN).permitAll().antMatchers(Endpoints.SEARCH).permitAll()
+		http.authorizeRequests().antMatchers(Endpoints.SEND_CODE).permitAll()
+				.antMatchers(Endpoints.LOGIN).permitAll()
+				.antMatchers(Endpoints.SEARCH).permitAll()
 				.anyRequest().authenticated();
 
 		http.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint);
