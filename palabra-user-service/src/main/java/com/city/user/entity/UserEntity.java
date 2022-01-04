@@ -1,11 +1,14 @@
 package com.city.user.entity;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.UUID;
 
 import static com.city.user.util.Constants.DB_SCHEMA;
 
@@ -20,7 +23,7 @@ public class UserEntity implements Serializable {
     private Long id;
 
     @Column(nullable = false)
-    private String uuid;
+    private UUID uuid;
 
     @Column(nullable = false, length = 50)
     private String name;
@@ -43,11 +46,11 @@ public class UserEntity implements Serializable {
     @Version
     private Short version;
 
-    public String getUuid() {
+    public UUID getUuid() {
         return uuid;
     }
 
-    public void setUuid(String uuid) {
+    public void setUuid(UUID uuid) {
         this.uuid = uuid;
     }
 

@@ -9,6 +9,7 @@ import com.city.user.entity.UserEntity;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class UserMapper {
@@ -20,7 +21,7 @@ public class UserMapper {
     public static UserResponse toDto(UserEntity entity){
         UserResponse response = new UserResponse();
         response.setId(entity.getId());
-        response.setUuid(entity.getUuid());
+        response.setUuid(entity.getUuid().toString());
         response.setName(entity.getName());
         response.setMobile(entity.getMobile());
         response.setPhoto(entity.getPhoto());
@@ -37,6 +38,7 @@ public class UserMapper {
         entity.setMobile(mobile);
         entity.setName("");
         entity.setCode(code);
+        entity.setUuid(UUID.randomUUID());
         return entity;
     }
 
