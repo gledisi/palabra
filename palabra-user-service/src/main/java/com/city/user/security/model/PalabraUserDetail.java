@@ -11,12 +11,16 @@ import java.util.Collection;
 public class PalabraUserDetail implements UserDetails, CredentialsContainer {
 
     private static final long serialVersionUID = 1L;
-    private final Long userId;
+    private final String userId;
     private final String mobile;
     private String activationCode;
     private final Collection<PalabraAuthority> authority;
     private final boolean valid;
 
+
+    public String getUserId() {
+        return userId;
+    }
 
     @Override
     public void eraseCredentials() {

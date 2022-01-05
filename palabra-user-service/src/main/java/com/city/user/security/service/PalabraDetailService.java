@@ -27,7 +27,7 @@ public class PalabraDetailService implements UserDetailsService {
     public UserDetails loadUserByUsername(String mobile) {
         UserEntity user = repository.findByMobile(mobile);
         return  PalabraUserDetail.builder()
-                .userId(user.getId())
+                .userId(user.getUuid().toString())
                 .mobile(user.getMobile())
                 .activationCode(user.getCode())
                 .authority(toAuthority())

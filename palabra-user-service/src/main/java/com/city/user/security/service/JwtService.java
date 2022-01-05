@@ -36,6 +36,7 @@ public class JwtService {
 					.setIssuedAt(Date.from(issuedDate.toInstant()))
 					.setExpiration(Date.from(expirationDate.toInstant()))
 					.claim(PalabraClaim.ROLES, userDetail.getAuthorities())
+					.claim(PalabraClaim.USER_ID, userDetail.getUserId())
 					.signWith(SignatureAlgorithm.HS256, properties.getJwtSecret())
 					.compact();
 			// @formatter:on
@@ -78,6 +79,7 @@ public class JwtService {
 						.getBody();
 				return PalabraTokenDetails.builder()
 						.id(extractTokenIdFromClaims(claims))
+						.userId(extractUserIdFromClaims(claims))
 						.mobile(extractMobileFromClaims(claims))
 						.authorities(extractAuthoritiesFromClaims(claims))
 						.valid(true)
@@ -105,6 +107,11 @@ public class JwtService {
 
 	private String extractTokenIdFromClaims(@NotNull Claims claims) {
 		return (String) claims.get(Claims.ID);
+	}
+
+	private String extractUserIdFromClaims(@NotNull Claims claims) {
+		String userId = (String) claims.getOrDefault(PalabraClaim.USER_ID,"");
+		return userId;
 	}
 
 	private String extractMobileFromClaims(@NotNull Claims claims) {

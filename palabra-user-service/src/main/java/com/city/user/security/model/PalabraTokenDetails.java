@@ -11,6 +11,7 @@ import java.util.List;
 public class PalabraTokenDetails {
 
 	private final String id;
+	private final String userId;
 	private final String mobile;
 	private final List<PalabraAuthority> authorities;
 	private final boolean valid;

@@ -40,3 +40,9 @@ CREATE TABLE user_conversation (
           decryption_key varchar,
           PRIMARY KEY ((user1_id, user2_id))
           );
+
+CREATE TABLE user_active_status (
+          user_id uuid  PRIMARY KEY,
+          is_active boolean,
+          last_seen timestamp
+    );
