@@ -44,10 +44,6 @@ public class ConversationService {
         return conversationRepository.findByUserId(userService.getAuthenticatedUser().getUserUUID());
     }
 
-    public ConversationsByUserEntity getConversation(UUID userId,UUID conversationId) {
-       return conversationRepository.findByUserIdAndConversationId(userId,conversationId);
-    }
-
     //OPERATION RELATED TO MESSAGES
 
     public ConversationsByUserEntity insertNewTextMessage(NewConversationMessage textMessage){

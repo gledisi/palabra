@@ -19,11 +19,6 @@ public class ConversationController {
     public ConversationController(ConversationService service) {
         this.service = service;
     }
-//TODO: REMOVE because is not needed and doesn't make sense
-//    @GetMapping(value = {"/{conversationId}"})
-//    public ResponseEntity<ConversationsByUserEntity> getConversation(@PathVariable String conversationId) {
-//        return ResponseEntity.ok(service.getConversation(conversationId));
-//    }
 
     @GetMapping
     public ResponseEntity<List<ConversationsByUserEntity>> getConversationsByUser() {

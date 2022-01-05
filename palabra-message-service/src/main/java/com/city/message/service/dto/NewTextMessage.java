@@ -22,4 +22,8 @@ public class NewTextMessage {
     public UUID getToUser() {
         return UUID.fromString(toUser);
     }
+
+    public String getToUserString() {
+        return toUser;
+    }
 }

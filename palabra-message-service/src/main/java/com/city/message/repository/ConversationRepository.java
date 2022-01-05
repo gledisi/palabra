@@ -62,8 +62,9 @@ public class ConversationRepository {
         return template.selectOne(query, UnreadMessagesCounterEntity.class);
     }
 
-    public boolean deleteById(UUID fromString) {
-        return false;
+    public boolean deleteById(UUID cId) {
+        Query query = query(where("conversation_id").is(cId));
+        return template.delete(query,ConversationsByUserEntity.class);
     }
 
     public ConversationsByUserEntity insert(ConversationsByUserEntity conversationsByUserEntity) {

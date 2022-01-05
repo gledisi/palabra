@@ -4,24 +4,30 @@ import com.city.message.entity.MessagesByConversationEntity;
 import com.city.message.service.ConversationService;
 import com.city.message.service.dto.NewTextMessage;
 import com.city.message.service.dto.ReplyMessage;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.websocket.server.PathParam;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("messages")
 public class MessageController {
 
     private final ConversationService service;
 
+    private final SimpMessagingTemplate simpMessagingTemplate;
+
     @Autowired
-    public MessageController(ConversationService service) {
+    public MessageController(ConversationService service, SimpMessagingTemplate simpMessagingTemplate) {
         this.service = service;
+        this.simpMessagingTemplate = simpMessagingTemplate;
     }
 
     @GetMapping(value = {"/{conversationId}"})
@@ -34,15 +40,11 @@ public class MessageController {
         return ResponseEntity.ok(service.getMessagesByUser(userId));
     }
 
-    @PostMapping
-    public ResponseEntity<MessagesByConversationEntity> newMessage1(@RequestBody NewTextMessage newTextMessage) {
-        return ResponseEntity.ok(service.newMessage(newTextMessage));
-    }
-
-    @MessageMapping("/new")
-    @SendTo("/topic/messages")
-    public ResponseEntity<MessagesByConversationEntity> newMessage(NewTextMessage newTextMessage) {
-        return ResponseEntity.ok(service.newMessage(newTextMessage));
+    @MessageMapping("/newMessage")
+    public void newMessage1(NewTextMessage newTextMessage) {
+        log.info("NewMessage : {}",newTextMessage);
+        MessagesByConversationEntity res= service.newMessage(newTextMessage);
+        simpMessagingTemplate.convertAndSendToUser(newTextMessage.getToUserString(),"/queue/messages",res);
     }
 
     @MessageMapping("/reply")
