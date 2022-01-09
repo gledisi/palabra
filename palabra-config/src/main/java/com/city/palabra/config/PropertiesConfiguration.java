@@ -1,5 +1,6 @@
 package com.city.palabra.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,13 +16,14 @@ import java.util.List;
 
 @Configuration
 @EnableConfigurationProperties
+@Slf4j
 public class PropertiesConfiguration {
 
     @Bean
     public PropertySourcesPlaceholderConfigurer properties(Environment env) {
         final PropertySourcesPlaceholderConfigurer ppc = new PropertySourcesPlaceholderConfigurer();
         ppc.setIgnoreResourceNotFound(true);
-        ppc.setLocations(resources(basePath(env)));
+        ppc.setLocations(resources(env.getProperty("filePath.config")));
         return ppc;
     }
 
@@ -31,6 +33,7 @@ public class PropertiesConfiguration {
 
     private Resource[] resources(String basePath) {
         String basePathPlusSeparator = basePath+File.separatorChar;
+        log.info("Base path======================================={}",basePath);
         final List<Resource> resourceList = new ArrayList<>();
         resourceList.add(new FileSystemResource(basePathPlusSeparator  + "kafka-consumer.properties"));
         resourceList.add(new FileSystemResource(basePathPlusSeparator + "cassandra.properties"));

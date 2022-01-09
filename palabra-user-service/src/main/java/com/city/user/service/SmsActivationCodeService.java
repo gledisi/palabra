@@ -33,6 +33,7 @@ public class SmsActivationCodeService implements ActivationCodeService {
     }
 
     private String sendSms(String to) {
+        log.info("@@@@@@@@@@@@@@-propertiess-@@@@@@@@@@@@@@@: {}" ,properties.getNumber());
         String code = generateCode();
         Twilio.init(properties.getSid(), properties.getToken());
         String bodyMessage = properties.getSmsText() + code;
