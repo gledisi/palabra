@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface UserContactRepository extends CrudRepository<UserContactEntity,Long> {
 
@@ -16,4 +17,7 @@ public interface UserContactRepository extends CrudRepository<UserContactEntity,
 
     @Query("select e from UserContactEntity e where e.name=?1 and e.user.id=?2")
     UserContactEntity existsByContactName(String name, Long userId);
+
+    @Query("select e from UserContactEntity e where e.user.uuid=?1 and e.contact.uuid=?2")
+    UserContactEntity findByUserUuidAndContactUuid(UUID user,UUID contact);
 }

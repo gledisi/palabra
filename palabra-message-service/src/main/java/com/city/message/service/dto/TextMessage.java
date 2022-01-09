@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 
 @Data
 public class TextMessage {
-    private Long messageId;
-    private Long fromUser;
+    private String messageId;
+    private String fromUser;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)

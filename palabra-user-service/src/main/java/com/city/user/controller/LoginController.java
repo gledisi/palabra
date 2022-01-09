@@ -1,5 +1,6 @@
 package com.city.user.controller;
 
+import com.city.user.dto.ActivationCodeRequest;
 import com.city.user.dto.LoginRequest;
 import com.city.user.dto.LoginResponse;
 import com.city.user.dto.VerifyCodeResponse;
@@ -33,9 +34,9 @@ public class LoginController {
 
 
     @PostMapping(Endpoints.SEND_CODE)
-    public ResponseEntity<VerifyCodeResponse> sendActivationCode(@RequestParam("mobile") String mobile) {
-        log.info("Try authenticate user with mobile number: {}", mobile);
-        return ResponseEntity.ok(userService.addOrUpdateActivationCode(mobile));
+    public ResponseEntity<VerifyCodeResponse> sendActivationCode(@RequestBody @Valid ActivationCodeRequest request) {
+        log.info("Try authenticate user with mobile number: {}", request.getMobile());
+        return ResponseEntity.ok(userService.addOrUpdateActivationCode(request.getMobile()));
     }
 
     @PostMapping(Endpoints.LOGIN)
@@ -50,6 +51,7 @@ public class LoginController {
     private LoginResponse createResponse(Authentication authentication) {
         PalabraUserDetail userDetail = (PalabraUserDetail) authentication.getDetails();
         LoginResponse response = new LoginResponse();
+        response.setUserId(userDetail.getUserId());
         response.setMobile(userDetail.getUsername());
         response.setRole(userDetail.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
         String generatedToken = jwtProvider.issueToken(userDetail);

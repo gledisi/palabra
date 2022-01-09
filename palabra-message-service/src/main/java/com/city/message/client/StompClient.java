@@ -1,36 +1,17 @@
 package com.city.message.client;
 
-import org.springframework.http.HttpHeaders;
-import org.springframework.messaging.converter.MappingJackson2MessageConverter;
-import org.springframework.messaging.simp.stomp.StompSessionHandler;
-import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
-import org.springframework.web.socket.WebSocketHttpHeaders;
-import org.springframework.web.socket.client.WebSocketClient;
-import org.springframework.web.socket.client.standard.StandardWebSocketClient;
-import org.springframework.web.socket.messaging.WebSocketStompClient;
-
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 
 public class StompClient {
-    private static String URL = "ws://localhost:8081/palabra/socket";
+private static final String token = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJkNmQxZTU2My04M2M2LTQwNTItYTY1Yy0xMzU1NTIyOTllZjEiLCJzdWIiOiIxMjMxMjMiLCJpYXQiOjE2NDE1ODE3MDIsImV4cCI6MTY0MTYwMzMwMiwicm9sZXMiOlt7ImlkIjoxLCJhdXRob3JpdHkiOiJVU0VSIn1dLCJ1c2VySWQiOiI0NGI1ZmM0Yi1jYjAxLTQ5YjYtODgyYS01NTg4MGMxZTgyYTgifQ.vGmoou3Eg5oon0_MtAYDbz7zzeZ81P4laxxMOnXbR0E";
 
     public static void main(String[] args) {
-        WebSocketClient client = new StandardWebSocketClient();
-        WebSocketHttpHeaders headers = new WebSocketHttpHeaders(headers());
-        WebSocketStompClient stompClient = new WebSocketStompClient(client);
-
-        stompClient.setMessageConverter(new MappingJackson2MessageConverter());
-        stompClient.setTaskScheduler(new ConcurrentTaskScheduler());
-        StompSessionHandler sessionHandler = new MyStompSessionHandler();
-        stompClient.connect(URL,headers, sessionHandler);
-        new Scanner(System.in).nextLine(); // Don't close immediately.
-    }
-
-    private static HttpHeaders headers(){
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(WebSocketHttpHeaders.AUTHORIZATION,"Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJhMjE2Y2Q2ZS1jZDEyLTRiOTctOWVlNS1jMjJiNTM3ODYxNzIiLCJzdWIiOiIxMjMxMjMiLCJpYXQiOjE2NDAyNTU3NTUsImV4cCI6MTY0MDI3NzM1NSwicm9sZXMiOlt7ImlkIjoxLCJhdXRob3JpdHkiOiJVU0VSIn1dfQ.HL0DNX_ADsLpOQwkH2zdi38hEAcV_8uSzeZiHfJfavg");
-        return headers;
+        MyStompSessionHandler sessionHandler = Util.connect("44b5fc4b-cb01-49b6-882a-55880c1e82a8",token);
+        while (true) {
+            String n = new Scanner(System.in).nextLine();
+            if (n != null) {
+                sessionHandler.sendMessage(n,"6c4ce2cb-fd02-4eba-a189-a3611d989f82");
+            }
+        }
     }
 }

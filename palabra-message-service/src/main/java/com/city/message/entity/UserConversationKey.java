@@ -18,6 +18,14 @@ public class UserConversationKey implements Serializable {
     @PrimaryKeyColumn(name="user2_id", ordinal = 1, type = PrimaryKeyType.PARTITIONED)
     private UUID user2Id;
 
+    public UserConversationKey(UUID user1Id, UUID user2Id) {
+        this.user1Id = user1Id;
+        this.user2Id = user2Id;
+    }
+
+    public UserConversationKey() {
+    }
+
     public UUID getUser1Id() {
         return user1Id;
     }

@@ -25,9 +25,19 @@ CREATE TABLE messages_by_conversation (
           url varchar,
           from_user uuid,
           PRIMARY KEY ((conversation_id), delivered_time, message_id))
-          WITH CLUSTERING ORDER BY (delivered_time DESC );
+          WITH CLUSTERING ORDER BY (delivered_time ASC );
 
 CREATE TABLE unread_messages_by_conversation (
+          conversation_id uuid,
+          message_id uuid,
+          delivered_time timestamp,
+          text text,
+          url varchar,
+          from_user uuid,
+          PRIMARY KEY ((conversation_id), delivered_time, message_id))
+          WITH CLUSTERING ORDER BY (delivered_time ASC );
+
+CREATE TABLE unread_messages_counter (
           conversation_id uuid,
           user_id uuid,
           count COUNTER,
@@ -36,9 +46,9 @@ CREATE TABLE unread_messages_by_conversation (
 CREATE TABLE user_conversation (
           user1_id uuid,
           user2_id uuid,
-          conversation_id TIMEUUID,
+          conversation_id uuid,
           decryption_key varchar,
-          PRIMARY KEY ((user1_id, user2_id))
+          PRIMARY KEY ((user1_id , user2_id))
           );
 
 CREATE TABLE user_active_status (

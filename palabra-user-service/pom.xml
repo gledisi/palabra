@@ -66,4 +66,18 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>appengine-maven-plugin</artifactId>
+                <version>2.2.0</version>
+                <configuration>
+                    <version>1</version>
+                    <projectId>city-cloud-1</projectId>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>

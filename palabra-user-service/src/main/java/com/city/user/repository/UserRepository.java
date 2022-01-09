@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
+import java.util.UUID;
+
 public interface UserRepository extends CrudRepository<UserEntity,Long> {
 
      UserEntity findByMobile(String mobile);
@@ -14,6 +16,6 @@ public interface UserRepository extends CrudRepository<UserEntity,Long> {
     @Query("UPDATE UserEntity e SET e.code=:code where e.mobile=:mobile")
     int updateCode(@Param("code")String code,@Param("mobile")String mobile);
 
-    @Query("select e FROM UserEntity e where e.id=:uuid")
-    UserEntity findByUUID(String uuid);
+    @Query("select e FROM UserEntity e where e.uuid=:uuid")
+    UserEntity findByUUID(UUID uuid);
 }

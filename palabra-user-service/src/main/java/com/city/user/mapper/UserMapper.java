@@ -50,15 +50,19 @@ public class UserMapper {
     }
 
     public static ContactResponse toContactResponse(UserContactEntity entity){
-        ContactResponse response = new ContactResponse();
-        response.setContactId(entity.getId());
-        response.setCreatedOn(entity.getCreatedOn());
-        response.setName(entity.getName());
-        response.setUser(toDto(entity.getContact()));
-        return response;
+
+        if(entity!=null) {
+            ContactResponse response = new ContactResponse();
+            response.setContactId(entity.getId());
+            response.setCreatedOn(entity.getCreatedOn());
+            response.setName(entity.getName());
+            response.setUser(toDto(entity.getContact()));
+            return response;
+        }
+        return null;
     }
 
-    public static List<ContactResponse> contactResponse(List<UserContactEntity> entities) {
+    public static List<ContactResponse> toContactResponse(List<UserContactEntity> entities) {
         return entities.stream().map(UserMapper::toContactResponse).collect(Collectors.toList());
     }
 }

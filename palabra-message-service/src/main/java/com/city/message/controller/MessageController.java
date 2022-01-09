@@ -6,6 +6,7 @@ import com.city.message.repository.UserActiveStatusRepository;
 import com.city.message.service.ConversationService;
 import com.city.message.service.dto.NewTextMessage;
 import com.city.message.service.dto.ReplyMessage;
+import com.city.message.util.Constants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -55,7 +56,7 @@ public class MessageController {
     public void newMessage(NewTextMessage newTextMessage) {
         log.info("NewMessage : {}",newTextMessage);
         MessagesByConversationEntity res= service.newMessage(newTextMessage);
-        simpMessagingTemplate.convertAndSendToUser(newTextMessage.getToUserString(),"/queue/messages",res);
+        simpMessagingTemplate.convertAndSendToUser(newTextMessage.getToUserString(), Constants.USER_MESSAGE_DESTINATION,res);
     }
 
     @MessageMapping("/reply")
@@ -64,11 +65,11 @@ public class MessageController {
         return ResponseEntity.ok(service.replyTextMessage(newTextMessage));
     }
 
-    //TODO:
-//    @PostMapping(value = "/forward")
-//    public ResponseEntity<MessagesByConversationEntity> forwardMessage(ForwardMessage newTextMessage){
-//        return ResponseEntity.ok(service.forwardTextMessage(newTextMessage));
-//    }
+
+    @PostMapping
+    public ResponseEntity<MessagesByConversationEntity> forwardMessage(@RequestBody NewTextMessage newTextMessage){
+        return ResponseEntity.ok(service.newMessage(newTextMessage));
+    }
 
     @DeleteMapping(value = "/{messageId}")
     public ResponseEntity<Boolean> deleteMessage(@PathVariable String messageId) {

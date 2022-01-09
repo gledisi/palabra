@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.Data;
-import org.springframework.data.cassandra.core.mapping.CassandraType;
 import org.springframework.data.cassandra.core.mapping.Column;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
@@ -16,9 +15,9 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
-@Table("messages_by_conversation")
-public class MessagesByConversationEntity implements Serializable {
-    private static final long serialVersionUID = -4628383980504875248L;
+@Table("unread_messages_by_conversation")
+public class UnreadMessagesByConversationEntity implements Serializable {
+    private static final long serialVersionUID = -8612341285175653773L;
 
     @PrimaryKey("conversation_id")
     private UUID conversationId;
@@ -35,19 +34,10 @@ public class MessagesByConversationEntity implements Serializable {
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime deliveredTime;
 
-    @Column("read_time")
-    private LocalDateTime readTime;
-
     @Column("text")
     private String text;
 
     @Column("url")
     private String url;
 
-    public MessagesByConversationEntity() {
-    }
-
-    public MessagesByConversationEntity(UUID conversationId) {
-        this.conversationId = conversationId;
-    }
 }

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class UserService {
@@ -40,7 +41,7 @@ public class UserService {
     }
 
     public UserResponse getUser(String uuid) {
-        return UserMapper.toDto(userRepository.findByUUID(uuid));
+        return UserMapper.toDto(userRepository.findByUUID(UUID.fromString(uuid)));
     }
 
 //    public List<UserResponse> getUsers(){
@@ -73,7 +74,13 @@ public class UserService {
     }
 
     public List<ContactResponse> getContacts() {
-        return UserMapper.contactResponse(contactRepository.findByUserId(authenticationService.getUser().getId()));
+        return UserMapper.toContactResponse(contactRepository.findByUserId(authenticationService.getUser().getId()));
+    }
+
+    public ContactResponse getContact(String userUuid,String contactUuid) {
+        UUID user = UUID.fromString(userUuid);
+        UUID contact = UUID.fromString(contactUuid);
+        return UserMapper.toContactResponse(contactRepository.findByUserUuidAndContactUuid(user,contact));
     }
 
     public Boolean addContact(NewContactRequest contact) {

@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
+import sun.net.www.MessageHeader;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -65,7 +66,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	}
 
 	private String validateRequestAndGetToken(HttpServletRequest request) {
-		String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+		String token = request.getHeader("Authorization");
+		String tokenWs = request.getParameter("token");
+		if(tokenWs!=null){
+			return tokenWs;
+		}
 		if (token == null) {
 			throw new InvalidTokenException("Authorization header not found");
 		}
